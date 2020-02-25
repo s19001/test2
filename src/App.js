@@ -1,69 +1,108 @@
 import React from 'react'
-import { List, ListItem, ListItemText } from '@material-ui/core'
+// import { List, ListItem, ListItemText } from '@material-ui/core'
 
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: {},
-      item: {
-        prefecture: '',
-        city: '',
-        suburb: ''
-        // zipcode: '',
-        // prefcode: '',
-        // address1: '',
-        // address2: '',
-        // address3: ''
-      }
+      locate: '',
+      zip_code: ''
+      //item: {
+      // prefecture: '',
+      // city: '',
+      // suburb: ''
+      //zipcode: '',
+      //address1: '',
+      //address2: '',
+      //address3: ''
+      //}
     }
+    this.handleClick = this.handleClick.bind(this)
   }
 
-  async getAddress (address) {
-    const getJSON = (uri, options) =>
-      window
-        .fetch(uri, options)
-        .then(res => res.json())
-        .then(json => ({
-          prefecture: json.prefecture,
-          city: json.city,
-          suburb: json.suburb
-        }))
-
-    const options = { method: 'get' }
-    const uri = 'https://postcode.teraren.com/postcodes.json?'
-    const params = `s={text}`
-    // const uri = 'https://zip-cloud.appspot.com/api/'
-    // const params = `search?=zipcode={zipcode}`
-    const data = await getJSON(uri + params, options)
-    this.setState({ data: data })
+  handleClick () {
+    fetch('https://api.zipaddress.net/?zipcode=' + this.state.zip_code, {
+      mode: 'cors'
+    })
+      .then(res => {
+        return res.json()
+      })
+      .then(json => {
+        this.setState({ locate: json.data.fullAddress })
+      })
   }
 
-  handleUpdate (event) {
-    const index = event.target.dataset.optionIndex
-    const item = this.state.data[index]
-    const { prefecture, city, suburb } = props.item
-    const address = `${item.pregecture}${item.city}${item.suburb}`
-    this.getData(item.text)
-    this.setState({ item: item })
-  }
+  // var xhr = new XMLHttpRequest();
 
-  async componentDidMount () {
-    this.getData()
-  }
+  //xhr.open('GET','https://zip-cloud.appspot.com/api/search?zipcode=7830060');
+  //xhr.send()
+  // componentDidMount () {
+  // return fetch('https://zip-cloud.appspot.com/api/search?zipcode=7830060')
+  // .then((response)=>response.json())
+  //.then((responseJson) => {
+  // this.setState({
+  //    loading: true,
+  //  data: responseJson,
+  //    })
+  // })
+  //     xhr.open('GET','https://zip-cloud.appspot.com/api/search?zipcode=7830060');
+  //     xhr.send()
+  //     xhr.onreadystatechange = function() {
+  //       if (xhr.readyState === 4 && xhr.status === 200)
+  //         A(json)
+  //   }
+  //   console.log(data)
+  //}
+
+  // function A(json){
+  //console.log(json.results)
+  // }
+  //   async getAddress (id) {
+  //     const getJSON = (uri, options) =>
+  //       window
+  //         .fetch(uri, options)
+  //         .then(res => res.json())
+  //         .then(json => ({
+  //           zipcode: json.zipcode,
+  //           address1: json.address1,
+  //           address2: json.address2,
+  //           address3: json.address3
+  //           // prefecture: json.prefecture,
+  //           // city: json.city,
+  //           // suburb: json.suburb
+  //         }))
+  //
+  //     const options = { method: 'get' }
+  //     // const uri = 'https://postcode.teraren.com/postcodes.json?'
+  //     // const params = `s={text}`
+  //     const uri = 'https://zip-cloud.appspot.com/api/'
+  //     const params = `search?=zipcode={zipcode}`
+  //     const data = await getJSON(uri + params, options)
+  //     this.setState({ data: data })
+  //   }
+  //
+  //   handleUpdate (event) {
+  //     const index = event.target.dataset.optionIndex
+  //     const item = this.state.data[index]
+  //     this.getData(item.text)
+  //     this.setState({ item: item })
+  //   }
+  //
+  //   async componentDidMount () {
+  //     this.getData()
+  //   }
 
   render () {
     return (
       <div>
         <p>郵便番号から住所を検索</p>
         <input
-          name='num'
-          type='number'
-          value={this.state.text}
-          onChange={this.handleChange}
+          type='text'
+          value={this.state.zip_code}
+          onChange={e => this.setState({ zip_code: e.target.value })}
         />
-        <input type='submit' value='送信' />
-        <p>住所: {this.state.item}</p>
+        <button onClick={this.handleClick}>住所を検索</button>
+        <p>住所: {this.state.locate}</p>
       </div>
     )
   }
