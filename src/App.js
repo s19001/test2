@@ -11,11 +11,11 @@ class App extends React.Component {
   }
 
   handleClick () {
-    fetch('https://api.zipaddress.net/?zipcode=' + this.state.zip_code,{
+    fetch('https://api.zipaddress.net/?zipcode=' + this.state.zip_code, {
       mode: 'cors'
     })
       .then(res => {
-        return res.json
+        return res.json()
       })
       .then(json => {
         this.setState({ locate: json.data.fullAddress })
@@ -27,7 +27,7 @@ class App extends React.Component {
       <div>
         <p>郵便番号から住所を検索</p>
         <input
-          type='number'
+          type='text'
           value={this.state.zip_code}
           onChange={e => this.setState({ zip_code: e.target.value })}
         />
@@ -36,5 +36,7 @@ class App extends React.Component {
       </div>
     )
   }
+}
 
 export default App
+
