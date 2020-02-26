@@ -1,4 +1,12 @@
 import React from 'react'
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  CardContent,
+  Button,
+  TextField
+} from '@material-ui/core'
 
 class App extends React.Component {
   constructor (props) {
@@ -24,19 +32,24 @@ class App extends React.Component {
 
   render () {
     return (
-      <div>
-        <p>郵便番号から住所を検索</p>
-        <input
-          type='text'
-          value={this.state.zip_code}
-          onChange={e => this.setState({ zip_code: e.target.value })}
-        />
-        <button onClick={this.handleClick}>住所を検索</button>
-        <p>住所: {this.state.locate}</p>
-      </div>
+      <Card>
+        <CardHeader title='郵便番号から住所を検索' />
+        <CardActions>
+          <TextField
+            type='number'
+            value={this.state.zip_code}
+            onChange={e => this.setState({ zip_code: e.target.value })}
+          />
+          <Button variant='outlined' onClick={this.handleClick} color='primary'>
+            住所を検索
+          </Button>
+        </CardActions>
+        <CardContent>
+          <p>住所: {this.state.locate}</p>
+        </CardContent>
+      </Card>
     )
   }
 }
 
 export default App
-
